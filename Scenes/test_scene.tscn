@@ -1,0 +1,44 @@
+[gd_scene load_steps=4 format=3 uid="uid://cc47vap78hm28"]
+
+[ext_resource type="Script" uid="uid://bgqya2ioe6lm7" path="res://Scripts/Portable/State/State.gd" id="1_3dogw"]
+[ext_resource type="Script" uid="uid://cy7j1my4tjsav" path="res://Scripts/Portable/State/Transitions/TimerTransition.gd" id="2_50ct6"]
+[ext_resource type="Script" uid="uid://dmcp2q1y1jtj5" path="res://Scripts/Portable/State/StateActions/StateActionDebugPrint.gd" id="3_50ct6"]
+
+[node name="TestScene" type="Node2D"]
+
+[node name="Root" type="Node" parent="." node_paths=PackedStringArray("_initial_state")]
+script = ExtResource("1_3dogw")
+_initial_state = NodePath("State/SubState1/SubSubState")
+metadata/_custom_type_script = "uid://bgqya2ioe6lm7"
+
+[node name="State" type="Node" parent="Root"]
+script = ExtResource("1_3dogw")
+metadata/_custom_type_script = "uid://bgqya2ioe6lm7"
+
+[node name="StateActionDebugPrint" type="Node" parent="Root/State"]
+script = ExtResource("3_50ct6")
+msg = "Message from State"
+metadata/_custom_type_script = "uid://dmcp2q1y1jtj5"
+
+[node name="SubState" type="Node" parent="Root/State"]
+script = ExtResource("1_3dogw")
+metadata/_custom_type_script = "uid://bgqya2ioe6lm7"
+
+[node name="SubState1" type="Node" parent="Root/State"]
+script = ExtResource("1_3dogw")
+metadata/_custom_type_script = "uid://bgqya2ioe6lm7"
+
+[node name="SubSubState" type="Node" parent="Root/State/SubState1"]
+script = ExtResource("1_3dogw")
+metadata/_custom_type_script = "uid://bgqya2ioe6lm7"
+
+[node name="TimerTransition" type="Node" parent="Root/State/SubState1/SubSubState" node_paths=PackedStringArray("_destination_state")]
+script = ExtResource("2_50ct6")
+wait_time = 5.0
+_destination_state = NodePath("../../../../State2")
+_has_tick = true
+metadata/_custom_type_script = "uid://cy7j1my4tjsav"
+
+[node name="State2" type="Node" parent="Root"]
+script = ExtResource("1_3dogw")
+metadata/_custom_type_script = "uid://bgqya2ioe6lm7"

@@ -1,0 +1,127 @@
+[gd_scene load_steps=13 format=3 uid="uid://br5oomckn0c7w"]
+
+[ext_resource type="Script" uid="uid://boym5c5au0c0a" path="res://Scripts/Portable/AI/BehaviorTree/BehaviorTree.gd" id="1_4o7sg"]
+[ext_resource type="Script" uid="uid://dmmnekly1p4mo" path="res://Scripts/Portable/AI/BehaviorTree/CompositeNodes/BTN_Selector.gd" id="2_4k7rp"]
+[ext_resource type="Script" uid="uid://bp07dnha808g3" path="res://Scripts/Portable/AI/BehaviorTree/BlackBoardBase.gd" id="2_kcigv"]
+[ext_resource type="Script" uid="uid://dhhfvjyctdvb0" path="res://Scripts/Portable/AI/BehaviorTree/DecoratorNodes/BTN_AlwaysFail.gd" id="3_5g3u3"]
+[ext_resource type="Script" uid="uid://d2131r46mtso6" path="res://Scripts/Portable/AI/BehaviorTree/BlackBoardEntry.gd" id="3_iapqh"]
+[ext_resource type="Script" uid="uid://bctrkcip5nkt6" path="res://Scripts/Portable/AI/BehaviorTree/ActionNodes/BTN_DebugLog.gd" id="4_atn81"]
+[ext_resource type="Script" uid="uid://krdqmb1sepd1" path="res://Scripts/Portable/AI/BehaviorTree/CompositeNodes/BTN_Sequencer.gd" id="5_kcigv"]
+[ext_resource type="Script" uid="uid://clsr0w75lmukb" path="res://Scripts/Portable/AI/BehaviorTree/DecoratorNodes/BTN_AlwaysSucceed.gd" id="6_iapqh"]
+[ext_resource type="Script" uid="uid://dx81trpy4scp7" path="res://Scripts/Portable/AI/BehaviorTree/ActionNodes/BTN_Wait.gd" id="7_4k7rp"]
+[ext_resource type="Script" uid="uid://l0t6igt8wwg2" path="res://Scripts/Portable/AI/BehaviorTree/ActionNodes/BTN_SetBlackboardValue.gd" id="8_5g3u3"]
+[ext_resource type="Script" uid="uid://copfjtyr6di4r" path="res://Scripts/Portable/AI/BehaviorTree/DecoratorNodes/BTN_RepeatUntilFail.gd" id="10_iapqh"]
+[ext_resource type="Script" uid="uid://dbmekr80prq31" path="res://Scripts/Portable/AI/BehaviorTree/ActionNodes/BTN_PrintBlackboardKey.gd" id="12_3m5jm"]
+
+[node name="BehaviorTree" type="Node" node_paths=PackedStringArray("_blackboard", "_root")]
+script = ExtResource("1_4o7sg")
+_blackboard = NodePath("BlackBoardBase")
+_root = NodePath("Root")
+metadata/_custom_type_script = "uid://boym5c5au0c0a"
+
+[node name="BlackBoardBase" type="Node" parent="."]
+script = ExtResource("2_kcigv")
+metadata/_custom_type_script = "uid://bp07dnha808g3"
+
+[node name="Test" type="Node" parent="BlackBoardBase"]
+script = ExtResource("3_iapqh")
+type = 3
+Value = Vector2(0, 0)
+metadata/_custom_type_script = "uid://d2131r46mtso6"
+
+[node name="Test2" type="Node" parent="BlackBoardBase"]
+script = ExtResource("3_iapqh")
+type = 2
+Value = false
+metadata/_custom_type_script = "uid://d2131r46mtso6"
+
+[node name="Root" type="Node" parent="."]
+script = ExtResource("2_4k7rp")
+metadata/_custom_type_script = "uid://dmmnekly1p4mo"
+
+[node name="BTN_AlwaysFail2" type="Node" parent="Root"]
+script = ExtResource("3_5g3u3")
+metadata/_custom_type_script = "uid://dhhfvjyctdvb0"
+
+[node name="BTN_PrintBlackboardKey" type="Node" parent="Root/BTN_AlwaysFail2"]
+script = ExtResource("12_3m5jm")
+key = &"Test"
+metadata/_custom_type_script = "uid://dbmekr80prq31"
+
+[node name="BTN_AlwaysFail" type="Node" parent="Root"]
+script = ExtResource("3_5g3u3")
+metadata/_custom_type_script = "uid://dhhfvjyctdvb0"
+
+[node name="BTN_DebugLog" type="Node" parent="Root/BTN_AlwaysFail"]
+script = ExtResource("4_atn81")
+_msg = "Always Fail, first log"
+metadata/_custom_type_script = "uid://bctrkcip5nkt6"
+
+[node name="BTN_Sequencer" type="Node" parent="Root"]
+script = ExtResource("5_kcigv")
+metadata/_custom_type_script = "uid://krdqmb1sepd1"
+
+[node name="BTN_DebugLog" type="Node" parent="Root/BTN_Sequencer"]
+script = ExtResource("4_atn81")
+_msg = "First Sequencer node"
+metadata/_custom_type_script = "uid://bctrkcip5nkt6"
+
+[node name="BTN_DebugLog2" type="Node" parent="Root/BTN_Sequencer"]
+script = ExtResource("4_atn81")
+_msg = "Second Sequencer Node"
+metadata/_custom_type_script = "uid://bctrkcip5nkt6"
+
+[node name="BTN_AlwaysSucceed" type="Node" parent="Root/BTN_Sequencer"]
+script = ExtResource("6_iapqh")
+metadata/_custom_type_script = "uid://clsr0w75lmukb"
+
+[node name="BTN_DebugLog3" type="Node" parent="Root/BTN_Sequencer/BTN_AlwaysSucceed"]
+script = ExtResource("4_atn81")
+_msg = "Third Sequencer Node, Always fail"
+_result = 4
+metadata/_custom_type_script = "uid://bctrkcip5nkt6"
+
+[node name="BTN_Wait" type="Node" parent="Root/BTN_Sequencer"]
+script = ExtResource("7_4k7rp")
+wait_time = 5.0
+metadata/_custom_type_script = "uid://dx81trpy4scp7"
+
+[node name="BTN_DebugLog3" type="Node" parent="Root/BTN_Sequencer"]
+script = ExtResource("4_atn81")
+_msg = "Waited 5 seconds for Sequencer Node 4"
+metadata/_custom_type_script = "uid://bctrkcip5nkt6"
+
+[node name="BTN_RepeatUntilFail" type="Node" parent="Root/BTN_Sequencer"]
+script = ExtResource("10_iapqh")
+metadata/_custom_type_script = "uid://copfjtyr6di4r"
+
+[node name="BTN_Sequencer" type="Node" parent="Root/BTN_Sequencer/BTN_RepeatUntilFail"]
+script = ExtResource("5_kcigv")
+metadata/_custom_type_script = "uid://krdqmb1sepd1"
+
+[node name="BTN_SetBlackboardValue" type="Node" parent="Root/BTN_Sequencer/BTN_RepeatUntilFail/BTN_Sequencer"]
+script = ExtResource("8_5g3u3")
+key = &"Test"
+type = 3
+Value = Vector2(50, 20)
+metadata/_custom_type_script = "uid://l0t6igt8wwg2"
+
+[node name="BTN_Wait" type="Node" parent="Root/BTN_Sequencer/BTN_RepeatUntilFail/BTN_Sequencer"]
+script = ExtResource("7_4k7rp")
+wait_time = 1.0
+metadata/_custom_type_script = "uid://dx81trpy4scp7"
+
+[node name="BTN_DebugLog" type="Node" parent="Root/BTN_Sequencer/BTN_RepeatUntilFail/BTN_Sequencer"]
+script = ExtResource("4_atn81")
+_msg = "Waited 1 Sec, toggled key"
+metadata/_custom_type_script = "uid://bctrkcip5nkt6"
+
+[node name="BTN_PrintBlackboardKey2" type="Node" parent="Root/BTN_Sequencer/BTN_RepeatUntilFail/BTN_Sequencer"]
+script = ExtResource("12_3m5jm")
+key = &"Test"
+metadata/_custom_type_script = "uid://dbmekr80prq31"
+
+[node name="BTN_PrintBlackboardKey3" type="Node" parent="Root/BTN_Sequencer/BTN_RepeatUntilFail/BTN_Sequencer"]
+script = ExtResource("12_3m5jm")
+key = &"Test2"
+metadata/_custom_type_script = "uid://dbmekr80prq31"
